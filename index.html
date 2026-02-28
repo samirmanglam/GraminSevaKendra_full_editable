@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraminSevaKendra - ग्रामीण सेवा केंद्र | Digital Village Services</title>
+    <meta name="description" content="GraminSevaKendra - हर सेवा, आपके गांव के पास। सरकारी, बैंकिंग और डिजिटल सेवाएं एक ही जगह।">
+    <meta name="keywords" content="Gramin Seva Kendra, Government Services, Banking, Digital Services, Bihar, Rampur Murliganj">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tone.js for Audio -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // EmailJS Initialization
+        // ⚠️ IMPORTANT: Niche apna EmailJS Public Key daalo
+        // EmailJS.com pe free account banao → Account → API Keys
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY"); // 🔑 Yahan apna Public Key daalo
+        })();
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mukta': ['Mukta', 'sans-serif'],
+                        'noto': ['Noto Sans Devanagari', 'sans-serif'],
+                    },
+                    colors: {
+                        'village-brown': '#8B4513',
+                        'village-dark': '#2C1810',
+                        'village-gold': '#D4AF37',
+                        'village-cream': '#F5E6D3',
+                        'village-green': '#2D5016',
+                        'village-saffron': '#FF9933',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'swing': 'swing 2s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'flicker': 'flicker 3s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            overflow-x: hidden;
+            background: #1a0f0a;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Mukta', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2C1810;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 5px;
+        }
+
+        /* Gate Animation */
+        .gate-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            pointer-events: none;
+        }
+
+        .gate-left, .gate-right {
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, #3e2723 0%, #5d4037 50%, #3e2723 100%);
+            position: relative;
+            transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .gate-left {
+            transform-origin: left;
+            border-right: 8px solid #D4AF37;
+        }
+
+        .gate-right {
+            transform-origin: right;
+            border-left: 8px solid #D4AF37;
+        }
+
+        .gate-left::before, .gate-right::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0,0,0,0.3) 50px, rgba(0,0,0,0.3) 53px),
+                repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(0,0,0,0.2) 80px, rgba(0,0,0,0.2) 83px);
+        }
+
+        .gate-wood-texture {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(139,69,19,0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(160,82,45,0.3) 0%, transparent 50%);
+        }
+
+        .gate-handle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #D4AF37 0%, #B8860B 100%);
+            border-radius: 50%;
+            top: 50%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .gate-left .gate-handle {
+            right: 30px;
+        }
+
+        .gate-right .gate-handle {
+            left: 30px;
+        }
+
+        .gate-open .gate-left {
+            transform: perspective(1000px) rotateY(-100deg);
+        }
+
+        .gate-open .gate-right {
+            transform: perspective(1000px) rotateY(100deg);
+        }
+
+        /* Fog Animation */
+        #fog-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        /* Birds Animation */
+        .bird {
+            position: fixed;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .bird svg {
+            width: 30px;
+            height: 30px;
+            fill: #1a1a1a;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateX(-100px) translateY(0px) scale(0.5);
+            }
+            25% {
+                transform: translateX(25vw) translateY(-20px) scale(0.7);
+            }
+            50% {
+                transform: translateX(50vw) translateY(10px) scale(0.6);
+            }
+            75% {
+                transform: translateX(75vw) translateY(-30px) scale(0.8);
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px)) translateY(0px) scale(0.5);
+            }
+        }
+
+        @keyframes wingFlap {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.3); }
+        }
+
+        /* Floating Bell Button */
+        .temple-bell {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.5),
+                inset 0 2px 10px rgba(255,255,255,0.3),
+                0 0 20px rgba(212,175,55,0.4);
+            animation: swing 3s ease-in-out infinite;
+            border: 3px solid #8B4513;
+        }
+
+        .temple-bell:hover {
+            animation: swing 0.5s ease-in-out infinite;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .temple-bell i {
+            font-size: 32px;
+            color: #2C1810;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(37,211,102,0.4);
+            animation: float 3s ease-in-out infinite;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Service Cards */
+        .service-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(212,175,55,0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #D4AF37;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(212,175,55,0.2);
+        }
+
+        .service-icon {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Sub-service Buttons */
+        .sub-service-btn {
+            background: linear-gradient(135deg, rgba(139,69,19,0.8) 0%, rgba(44,24,16,0.9) 100%);
+            border: 2px solid #D4AF37;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sub-service-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(212,175,55,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .sub-service-btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .sub-service-btn:hover {
+            transform: translateX(10px);
+            box-shadow: -5px 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Parallax Background */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Night Mode Fireflies */
+        .firefly {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+            pointer-events: none;
+            z-index: 0;
+            animation: flicker 3s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* Text Animations */
+        .text-glow {
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px rgba(212,175,55,0.5); }
+            to { text-shadow: 0 0 20px rgba(212,175,55,0.8), 0 0 30px rgba(212,175,55,0.6); }
+        }
+
+        /* Category Expand Animation */
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        }
+
+        .category-content.active {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        /* Custom Button Styles */
+        .village-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+            border: 3px solid #D4AF37;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .village-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .village-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid rgba(212,175,55,0.3);
+            border-top: 4px solid #D4AF37;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .gate-left .gate-handle, .gate-right .gate-handle {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .temple-bell {
+                width: 60px;
+                height: 60px;
+                bottom: 100px;
+            }
+            
+            .whatsapp-btn {
+                width: 55px;
+                height: 55px;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection Color */
+        ::selection {
+            background: rgba(212,175,55,0.3);
+            color: #F5E6D3;
+        }
+    </style>
+</head>
+<body class="bg-village-dark text-village-cream">
+
+    <!-- Audio Context Warning -->
+    <div id="audio-warning" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 z-[9998] flex items-center justify-center hidden">
+        <div class="text-center p-8 bg-village-dark border-4 border-village-gold rounded-lg max-w-md">
+            <i class="fas fa-volume-up text-6xl text-village-gold mb-4"></i>
+            <h2 class="text-2xl font-bold mb-4 text-village-gold">ध्वनि सक्षम करें</h2>
+            <p class="mb-6 text-lg">बेहतर अनुभव के लिए कृपया ध्वनि सक्षम करें</p>
+            <button onclick="enableAudio()" class="village-btn px-8 py-3 rounded-lg text-xl font-bold text-white hover:scale-105 transform transition">
+                <i class="fas fa-play mr-2"></i> शुरू करें
+            </button>
+        </div>
+    </div>
+
+    <!-- Opening Gates -->
+    <div id="gates" class="gate-container">
+        <div class="gate-left">
+            <div class="gate-wood-texture"></div>
+            <div class="gate-handle"></div>
+            <div class="absolute top-1/2 right-10 transform -translate-y-1/2 text-village-gold text-6xl opacity-50">
+                <i class="fas fa-om"></i>
+            </div>
+        </div>
+        <div class="gate-right">
+            <div class="gate-wood-texture"></div>
+            <div class="gate-handle"></div>
+            <div class="absolute top-1/2 left-10 transform -translate-y-1/2 text-village-gold text-6xl opacity-50">
+                <i class="fas fa-om"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fog Canvas -->
+    <canvas id="fog-canvas"></canvas>
+
+    <!-- Birds Container -->
+    <div id="birds-container"></div>
+
+    <!-- Fireflies Container (Night Mode) -->
+    <div id="fireflies-container"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-opacity-0">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center bg-black bg-opacity-40 backdrop-blur-md rounded-full px-6 py-3 border border-village-gold border-opacity-30">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-village-gold to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-home text-village-dark text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-village-gold font-mukta tracking-wide">ग्रामीणसेवाकेंद्र</h1>
+                        <p class="text-xs text-village-cream opacity-80">हर सेवा, आपके गांव के पास</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#home" class="text-village-cream hover:text-village-gold transition font-semibold text-lg">मुख्य पृष्ठ</a>
+                    <a href="#services" class="text-village-cream hover:text-village-gold transition font-semibold text-lg">सेवाएं</a>
+                    <a href="#about" class="text-village-cream hover:text-village-gold transition font-semibold text-lg">हमारे बारे में</a>
+                    <a href="#contact" class="text-village-cream hover:text-village-gold transition font-semibold text-lg">संपर्क</a>
+                    <button onclick="toggleNightMode()" class="p-2 rounded-full bg-village-gold bg-opacity-20 hover:bg-opacity-40 transition">
+                        <i id="mode-icon" class="fas fa-moon text-village-gold text-xl"></i>
+                    </button>
+                </div>
+
+                <button class="md:hidden text-village-gold text-2xl" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-95 absolute w-full border-t border-village-gold">
+            <div class="flex flex-col p-4 space-y-4">
+                <a href="#home" class="text-village-cream hover:text-village-gold text-lg py-2 border-b border-gray-700">मुख्य पृष्ठ</a>
+                <a href="#services" class="text-village-cream hover:text-village-gold text-lg py-2 border-b border-gray-700">सेवाएं</a>
+                <a href="#about" class="text-village-cream hover:text-village-gold text-lg py-2 border-b border-gray-700">हमारे बारे में</a>
+                <a href="#contact" class="text-village-cream hover:text-village-gold text-lg py-2">संपर्क</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Parallax -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1566836610593-62a64888a216?w=1920&q=80" 
+                 alt="Village Background" 
+                 class="w-full h-full object-cover opacity-40"
+                 id="hero-bg">
+            <div class="absolute inset-0 bg-gradient-to-b from-village-dark via-transparent to-village-dark"></div>
+        </div>
+
+        <!-- Animated Content -->
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-20">
+            <div class="mb-8 animate-fade-in-up">
+                <div class="inline-block p-4 rounded-full bg-village-gold bg-opacity-20 border-2 border-village-gold mb-6 animate-pulse">
+                    <i class="fas fa-dharmachakra text-5xl text-village-gold"></i>
+                </div>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-village-gold via-yellow-200 to-village-gold text-glow font-mukta leading-tight">
+                ग्रामीण सेवा केंद्र में आपका स्वागत है
+            </h1>
+
+            <p class="text-xl md:text-3xl mb-8 text-village-cream opacity-90 font-light tracking-wide">
+                <span class="inline-block animate-bounce">हर सेवा, आपके गांव के पास</span>
+                <br>
+                <span class="text-village-gold text-2xl md:text-4xl font-semibold mt-4 block">डिजिटल और आधुनिक सुविधा के साथ</span>
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center mt-12">
+                <a href="#services" class="village-btn px-8 py-4 rounded-full text-xl font-bold text-white hover:scale-105 transform transition shadow-2xl flex items-center gap-3">
+                    <i class="fas fa-hands-helping"></i>
+                    सेवाएं देखें
+                </a>
+                <a href="tel:7979788689" class="bg-green-600 hover:bg-green-700 px-8 py-4 rounded-full text-xl font-bold text-white hover:scale-105 transform transition shadow-2xl flex items-center gap-3 border-2 border-green-400">
+                    <i class="fas fa-phone-alt"></i>
+                    अभी कॉल करें
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
+                <div class="bg-black bg-opacity-40 backdrop-blur-sm p-4 rounded-xl border border-village-gold border-opacity-30">
+                    <div class="text-3xl font-bold text-village-gold">50+</div>
+                    <div class="text-sm text-village-cream">सेवाएं</div>
+                </div>
+                <div class="bg-black bg-opacity-40 backdrop-blur-sm p-4 rounded-xl border border-village-gold border-opacity-30">
+                    <div class="text-3xl font-bold text-village-gold">1000+</div>
+                    <div class="text-sm text-village-cream">खुश ग्राहक</div>
+                </div>
+                <div class="bg-black bg-opacity-40 backdrop-blur-sm p-4 rounded-xl border border-village-gold border-opacity-30">
+                    <div class="text-3xl font-bold text-village-gold">5+</div>
+                    <div class="text-sm text-village-cream">वर्षों का अनुभव</div>
+                </div>
+                <div class="bg-black bg-opacity-40 backdrop-blur-sm p-4 rounded-xl border border-village-gold border-opacity-30">
+                    <div class="text-3xl font-bold text-village-gold">24/7</div>
+                    <div class="text-sm text-village-cream">सहायता</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-3xl text-village-gold"></i>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="relative py-20 bg-gradient-to-b from-village-dark to-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold text-village-gold mb-4 font-mukta">हमारी सेवाएं</h2>
+                <div class="w-32 h-1 bg-gradient-to-r from-transparent via-village-gold to-transparent mx-auto"></div>
+                <p class="text-xl mt-4 text-village-cream opacity-80">सभी प्रकार की सरकारी, बैंकिंग और डिजिटल सेवाएं एक ही छत के नीचे</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
+                <!-- Service Categories will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="relative py-20 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-gradient-to-br from-village-brown to-village-dark p-8 md:p-12 rounded-3xl border-2 border-village-gold shadow-2xl">
+                <div class="text-center mb-8">
+                    <i class="fas fa-landmark text-6xl text-village-gold mb-4"></i>
+                    <h2 class="text-4xl md:text-5xl font-bold text-village-gold mb-4 font-mukta">हमारे बारे में</h2>
+                </div>
+                
+                <div class="space-y-6 text-lg text-village-cream leading-relaxed">
+                    <p class="text-center text-xl">
+                        <strong class="text-village-gold text-2xl">ग्रामीण सेवा केंद्र</strong> आपके गांव का विश्वसनीय डिजिटल साथी है। 
+                        हम पिछले 5 वर्षों से रामपुर मुर्लीगंज, मधेपुरा, बिहार की जनता को समर्पित भाव से सेवा प्रदान कर रहे हैं।
+                    </p>
+                    
+                    <div class="grid md:grid-cols-3 gap-6 mt-8">
+                        <div class="text-center p-6 bg-black bg-opacity-30 rounded-xl">
+                            <i class="fas fa-shield-alt text-4xl text-village-gold mb-3"></i>
+                            <h3 class="text-xl font-bold text-village-gold mb-2">विश्वसनीय</h3>
+                            <p>100% सुरक्षित और भरोसेमंद सेवाएं</p>
+                        </div>
+                        <div class="text-center p-6 bg-black bg-opacity-30 rounded-xl">
+                            <i class="fas fa-bolt text-4xl text-village-gold mb-3"></i>
+                            <h3 class="text-xl font-bold text-village-gold mb-2">तेज़ सेवा</h3>
+                            <p>समय की बचत, त्वरित परिणाम</p>
+                        </div>
+                        <div class="text-center p-6 bg-black bg-opacity-30 rounded-xl">
+                            <i class="fas fa-heart text-4xl text-village-gold mb-3"></i>
+                            <h3 class="text-xl font-bold text-village-gold mb-2">समर्पित</h3>
+                            <p>ग्राहक संतुष्टि हमारी प्राथमिकता</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="relative py-20 bg-gradient-to-b from-black to-village-dark">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold text-village-gold mb-4 font-mukta">संपर्क करें</h2>
+                <div class="w-32 h-1 bg-gradient-to-r from-transparent via-village-gold to-transparent mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="bg-gradient-to-br from-village-brown to-black p-8 rounded-2xl border-2 border-village-gold shadow-2xl">
+                    <h3 class="text-2xl font-bold text-village-gold mb-6 flex items-center gap-3">
+                        <i class="fas fa-address-card"></i> संपर्क जानकारी
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4 p-4 bg-black bg-opacity-30 rounded-lg hover:bg-opacity-50 transition">
+                            <div class="w-12 h-12 bg-village-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-village-dark text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-village-gold font-bold text-lg">पता</h4>
+                                <p class="text-village-cream">वार्ड नंबर 07, ब्राह्मण टोला<br>रामपुर मुर्लीगंज, मधेपुरा<br>बिहार - 852122</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 bg-black bg-opacity-30 rounded-lg hover:bg-opacity-50 transition">
+                            <div class="w-12 h-12 bg-village-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-village-dark text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-village-gold font-bold text-lg">मोबाइल</h4>
+                                <p class="text-village-cream text-xl font-semibold">7979788689</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 bg-black bg-opacity-30 rounded-lg hover:bg-opacity-50 transition">
+                            <div class="w-12 h-12 bg-village-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-village-dark text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-village-gold font-bold text-lg">ईमेल</h4>
+                                <p class="text-village-cream">Info@graminsevakendra.in</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 bg-black bg-opacity-30 rounded-lg hover:bg-opacity-50 transition">
+                            <div class="w-12 h-12 bg-village-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clock text-village-dark text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-village-gold font-bold text-lg">कार्य समय</h4>
+                                <p class="text-village-cream">सोमवार - शनिवार: 8:00 AM - 8:00 PM<br>रविवार: 9:00 AM - 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-village-brown to-black p-8 rounded-2xl border-2 border-village-gold shadow-2xl">
+                    <h3 class="text-2xl font-bold text-village-gold mb-6 flex items-center gap-3">
+                        <i class="fas fa-paper-plane"></i> संदेश भेजें
+                    </h3>
+                    
+                    <form id="contact-form" onsubmit="handleSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-village-gold mb-2 font-semibold">आपका नाम</label>
+                            <input type="text" name="from_name" id="from_name" required class="w-full px-4 py-3 rounded-lg bg-black bg-opacity-50 border border-village-gold text-village-cream focus:outline-none focus:border-village-gold focus:ring-2 focus:ring-village-gold transition" placeholder="अपना नाम दर्ज करें">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-village-gold mb-2 font-semibold">मोबाइल नंबर</label>
+                            <input type="tel" name="phone" id="phone" required class="w-full px-4 py-3 rounded-lg bg-black bg-opacity-50 border border-village-gold text-village-cream focus:outline-none focus:border-village-gold focus:ring-2 focus:ring-village-gold transition" placeholder="अपना मोबाइल नंबर दर्ज करें">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-village-gold mb-2 font-semibold">संदेश</label>
+                            <textarea rows="4" name="message" id="message" required class="w-full px-4 py-3 rounded-lg bg-black bg-opacity-50 border border-village-gold text-village-cream focus:outline-none focus:border-village-gold focus:ring-2 focus:ring-village-gold transition" placeholder="अपना संदेश लिखें"></textarea>
+                        </div>
+                        
+                        <button type="submit" id="submit-btn" class="w-full village-btn py-4 rounded-lg text-xl font-bold text-white hover:scale-105 transform transition flex items-center justify-center gap-3">
+                            <i class="fas fa-paper-plane" id="btn-icon"></i> 
+                            <span id="btn-text">भेजें</span>
+                        </button>
+                        
+                        <!-- Success/Error Message -->
+                        <div id="form-message" class="hidden text-center py-3 px-4 rounded-lg font-semibold text-lg"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t-4 border-village-gold py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="text-center md:text-left">
+                    <h3 class="text-2xl font-bold text-village-gold mb-4 font-mukta">ग्रामीण सेवा केंद्र</h3>
+                    <p class="text-village-cream opacity-80">आपके गांव का डिजिटल साथी। सभी सरकारी और डिजिटल सेवाएं एक ही जगह।</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold text-village-gold mb-4">त्वरित लिंक</h4>
+                    <ul class="space-y-2 text-village-cream">
+                        <li><a href="#home" class="hover:text-village-gold transition">मुख्य पृष्ठ</a></li>
+                        <li><a href="#services" class="hover:text-village-gold transition">सेवाएं</a></li>
+                        <li><a href="#about" class="hover:text-village-gold transition">हमारे बारे में</a></li>
+                        <li><a href="#contact" class="hover:text-village-gold transition">संपर्क</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold text-village-gold mb-4">सेवाएं</h4>
+                    <ul class="space-y-2 text-village-cream">
+                        <li>आधार सेवा</li>
+                        <li>पैन कार्ड</li>
+                        <li>बैंकिंग सेवा</li>
+                        <li>ऑनलाइन फॉर्म</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold text-village-gold mb-4">सोशल मीडिया</h4>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#" class="w-10 h-10 bg-village-gold rounded-full flex items-center justify-center text-village-dark hover:scale-110 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-village-gold rounded-full flex items-center justify-center text-village-dark hover:scale-110 transition">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-village-gold rounded-full flex items-center justify-center text-village-dark hover:scale-110 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-village-gold rounded-full flex items-center justify-center text-village-dark hover:scale-110 transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-village-gold border-opacity-30 pt-8 text-center">
+                <p class="text-village-cream">
+                    © 2026 Samir Manglam. सर्वाधिकार सुरक्षित।
+                </p>
+                <p class="text-village-gold mt-2 text-sm">
+                    "हर सेवा, आपके गांव के पास - डिजिटल और आधुनिक सुविधा के साथ"
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Buttons -->
+    <div class="temple-bell" onclick="playBellSound()" title="घंटी बजाएं">
+        <i class="fas fa-bell"></i>
+    </div>
+
+    <a href="https://wa.me/917979788689" target="_blank" class="whatsapp-btn" title="WhatsApp पर संपर्क करें">
+        <i class="fab fa-whatsapp text-3xl text-white"></i>
+    </a>
+
+    <!-- Service Detail Modal -->
+    <div id="service-modal" class="fixed inset-0 z-[9990] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-black bg-opacity-80" onclick="closeModal()"></div>
+            
+            <div class="inline-block align-bottom bg-gradient-to-br from-village-brown to-village-dark rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full border-2 border-village-gold">
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 id="modal-title" class="text-3xl font-bold text-village-gold font-mukta"></h3>
+                        <button onclick="closeModal()" class="text-village-gold hover:text-white text-3xl">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div id="modal-content" class="mt-2 max-h-[70vh] overflow-y-auto">
+                        <!-- Content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Service Data
+        const servicesData = [
+            {
+                id: 'government',
+                title: '🏛 सरकारी सेवाएं',
+                icon: 'fa-landmark',
+                color: 'from-orange-600 to-red-800',
+                services: [
+                    'आधार नामांकन / अपडेट',
+                    'पैन कार्ड आवेदन / सुधार',
+                    'मतदाता पहचान पत्र आवेदन',
+                    'पासपोर्ट आवेदन',
+                    'ड्राइविंग लाइसेंस आवेदन / नवीनीकरण',
+                    'वाहन आरसी सेवाएं',
+                    'राशन कार्ड सेवाएं',
+                    'जन्म / मृत्यु प्रमाण पत्र',
+                    'आय / जाति / निवास प्रमाण पत्र',
+                    'श्रम कार्ड',
+                    'ई-श्रम कार्ड',
+                    'आयुष्मान भारत कार्ड',
+                    'पीएम किसान पंजीकरण',
+                    'पीएम आवास योजना आवेदन',
+                    'पेंशन योजना (वृद्धावस्था / विधवा / दिव्यांग)',
+                    'उद्यम पंजीकरण (एमएसएमई)',
+                    'विवाह पंजीकरण',
+                    'संपत्ति पंजीकरण सहायता',
+                    'भूलेख / जमाबंदी',
+                    'जाति वैधता प्रमाण पत्र',
+                    'अधिवास प्रमाण पत्र',
+                    'कोर्ट फीस / ई-स्टाम्प',
+                    'पुलिस सत्यापन',
+                    'चरित्र प्रमाण पत्र',
+                    'अस्त्र लाइसेंस फॉर्म',
+                    'एफएसएसएआई पंजीकरण',
+                    'दुकान अधिनियम पंजीकरण'
+                ]
+            },
+            {
+                id: 'banking',
+                title: '💰 बैंकिंग और वित्तीय सेवाएं',
+                icon: 'fa-university',
+                color: 'from-green-700 to-green-900',
+                services: [
+                    'ईएईपीएस (आधार से पैसा निकासी)',
+                    'मनी ट्रांसफर (डीएमटी)',
+                    'माइक्रो एटीएम सेवा',
+                    'नया बैंक खाता खोलना',
+                    'बीमा (जीवन / सामान्य / स्वास्थ्य / वाहन)',
+                    'पीएमजेजेबीवाई / पीएमएसबीवाई',
+                    'अटल पेंशन योजना',
+                    'मुद्रा ऋण आवेदन',
+                    'स्वर्ण ऋण सहायता',
+                    'फास्टैग आवेदन / रिचार्ज',
+                    'क्रेडिट कार्ड आवेदन',
+                    'ऋण ईएमआई जमा (बाइक / कार / ट्रैक्टर / व्यक्तिगत / मोबाइल)',
+                    'महिला समूह ऋण',
+                    'किस्त जमा',
+                    'स्वयं सहायता समूह भुगतान संग्रह',
+                    'म्यूचुअल फंड / एसआईपी निवेश',
+                    'डीमैट खाता खोलना',
+                    'शेयर बाजार ट्रेडिंग सहायता'
+                ]
+            },
+            {
+                id: 'education',
+                title: '📝 शिक्षा और परीक्षा सेवाएं',
+                icon: 'fa-graduation-cap',
+                color: 'from-blue-700 to-blue-900',
+                services: [
+                    'ऑनलाइन परीक्षा फॉर्म भरना',
+                    'छात्रवृत्ति आवेदन',
+                    'कॉलेज प्रवेश फॉर्म',
+                    'प्रतियोगी परीक्षा पंजीकरण',
+                    'पीएमजीडीआईएसएचए कोर्स',
+                    'कौशल विकास कोर्स',
+                    'ऑनलाइन परिणाम प्रिंट',
+                    'आईटीआई / पॉलिटेक्निक फॉर्म',
+                    'सेना / पुलिस भर्ती फॉर्म',
+                    'रेलवे भर्ती फॉर्म',
+                    'सीटीईटी / टीईटी फॉर्म',
+                    'ऑनलाइन मॉक टेस्ट पंजीकरण',
+                    'ऑनलाइन प्रमाणीकरण कोर्स'
+                ]
+            },
+            {
+                id: 'utility',
+                title: '📱 यूटिलिटी और रिचार्ज सेवाएं',
+                icon: 'fa-mobile-alt',
+                color: 'from-purple-700 to-purple-900',
+                services: [
+                    'बिजली बिल भुगतान',
+                    'पानी बिल भुगतान',
+                    'मोबाइल रिचार्ज',
+                    'डीटीएच रिचार्ज',
+                    'गैस बुकिंग',
+                    'ब्रॉडबैंड बिल भुगतान',
+                    'फास्टैग रिचार्ज',
+                    'सभी ईएमआई भुगतान संग्रह',
+                    'ऑनलाइन टिकट बुकिंग (ट्रेन / तत्काल / बस / उड़ान)',
+                    'होटल बुकिंग'
+                ]
+            },
+            {
+                id: 'digital',
+                title: '🖨 डिजिटल और प्रिंटिंग सेवाएं',
+                icon: 'fa-print',
+                color: 'from-gray-700 to-gray-900',
+                services: [
+                    'ऑनलाइन फॉर्म भरना',
+                    'प्रिंटआउट / फोटोकॉपी',
+                    'लेमिनेशन',
+                    'पासपोर्ट साइज फोटो',
+                    'रिज्यूमे / सीवी बनाना',
+                    'ऑनलाइन शिकायत पंजीकरण',
+                    'हलफनामा टाइपिंग',
+                    'नोटरी ड्राफ्ट सहायता',
+                    'जीएसटी पंजीकरण',
+                    'जीएसटी रिटर्न फाइलिंग',
+                    'आयकर रिटर्न फाइलिंग',
+                    'टीडीएस रिटर्न फाइलिंग',
+                    'पैन-आधार लिंकिंग',
+                    'डीएससी (डिजिटल हस्ताक्षर प्रमाण पत्र)'
+                ]
+            },
+            {
+                id: 'modern',
+                title: '🎨 आधुनिक डिजिटल कार्य',
+                icon: 'fa-paint-brush',
+                color: 'from-pink-700 to-pink-900',
+                services: [
+                    'ग्राफिक डिजाइनिंग',
+                    'लोगो डिजाइन',
+                    'बैनर / पोस्टर डिजाइन',
+                    'वेडिंग कार्ड डिजाइन',
+                    'फ्लेक्स / होर्डिंग डिजाइन',
+                    'यूट्यूब थंबनेल डिजाइन',
+                    'विजिटिंग कार्ड डिजाइन',
+                    'आईडी कार्ड डिजाइन',
+                    'सोशल मीडिया पोस्ट डिजाइन',
+                    'वेबसाइट बनाना (वर्डप्रेस / कस्टम)',
+                    'ई-कॉमर्स वेबसाइट',
+                    'स्कूल / कोचिंग वेबसाइट',
+                    'बिजनेस पोर्टफोलियो वेबसाइट',
+                    'डोमेन + होस्टिंग सेटअप',
+                    '2D हाउस नक्शा',
+                    '3D हाउस डिजाइन',
+                    'अंदरूनी डिजाइन लेआउट'
+                ]
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initGates();
+            initFog();
+            initBirds();
+            renderServices();
+            initScrollEffects();
+            initParallax();
+        });
+
+        // Gate Animation
+        function initGates() {
+            setTimeout(() => {
+                document.getElementById('gates').classList.add('gate-open');
+                playWelcomeSound();
+                
+                setTimeout(() => {
+                    document.getElementById('gates').style.display = 'none';
+                }, 2500);
+            }, 1000);
+        }
+
+        // Audio Functions
+        let audioContextStarted = false;
+        let bgMusic = null;
+
+        function enableAudio() {
+            document.getElementById('audio-warning').style.display = 'none';
+            startAudioContext();
+        }
+
+        async function startAudioContext() {
+            if (!audioContextStarted) {
+                await Tone.start();
+                audioContextStarted = true;
+                playBackgroundAmbience();
+            }
+        }
+
+        function playWelcomeSound() {
+            if (!audioContextStarted) {
+                document.getElementById('audio-warning').style.display = 'flex';
+                return;
+            }
+            
+            // Temple bell sound
+            const bell = new Tone.MetalSynth({
+                harmonicity: 12,
+                resonance: 800,
+                modulationIndex: 20,
+                envelope: {
+                    decay: 1.5,
+                    release: 2
+                },
+                volume: -5
+            }).toDestination();
+            
+            bell.triggerAttackRelease("C4", "2n");
+            
+            // Jai Shri Ram chant effect (simulated with synth)
+            setTimeout(() => {
+                const synth = new Tone.Synth({
+                    oscillator: { type: "sine" },
+                    envelope: {
+                        attack: 0.1,
+                        decay: 0.3,
+                        sustain: 0.4,
+                        release: 1
+                    }
+                }).toDestination();
+                
+                const now = Tone.now();
+                synth.triggerAttackRelease("G4", "8n", now);
+                synth.triggerAttackRelease("A4", "8n", now + 0.2);
+                synth.triggerAttackRelease("C5", "4n", now + 0.4);
+            }, 800);
+        }
+
+        function playBellSound() {
+            if (!audioContextStarted) {
+                document.getElementById('audio-warning').style.display = 'flex';
+                return;
+            }
+            
+            const bell = new Tone.MetalSynth({
+                harmonicity: 12,
+                resonance: 800,
+                modulationIndex: 20,
+                envelope: {
+                    decay: 2,
+                    release: 3
+                },
+                volume: -3
+            }).toDestination();
+            
+            bell.triggerAttackRelease("E4", "1n");
+            
+            // Visual feedback
+            const btn = document.querySelector('.temple-bell');
+            btn.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                btn.style.transform = '';
+            }, 200);
+        }
+
+        function playBackgroundAmbience() {
+            // Create a subtle drone for village ambience
+            const drone = new Tone.Oscillator("C2", "sine").toDestination();
+            drone.volume.value = -25;
+            drone.start();
+            
+            // Occasional bird sounds (simulated)
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const bird = new Tone.Synth({
+                        oscillator: { type: "triangle" },
+                        envelope: {
+                            attack: 0.01,
+                            decay: 0.1,
+                            sustain: 0,
+                            release: 0.1
+                        },
+                        volume: -20
+                    }).toDestination();
+                    
+                    const now = Tone.now();
+                    bird.triggerAttackRelease("C6", "32n", now);
+                    bird.triggerAttackRelease("E6", "32n", now + 0.05);
+                }
+            }, 5000);
+        }
+
+        // Fog Animation
+        function initFog() {
+            const canvas = document.getElementById('fog-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let width, height;
+            let particles = [];
+            
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            
+            window.addEventListener('resize', resize);
+            resize();
+            
+            class FogParticle {
+                constructor() {
+                    this.reset();
+                }
+                
+                reset() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.2;
+                    this.radius = Math.random() * 100 + 50;
+                    this.opacity = Math.random() * 0.3 + 0.1;
+                }
+                
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    if (this.x < -this.radius) this.x = width + this.radius;
+                    if (this.x > width + this.radius) this.x = -this.radius;
+                    if (this.y < -this.radius) this.y = height + this.radius;
+                    if (this.y > height + this.radius) this.y = -this.radius;
+                }
+                
+                draw() {
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, this.radius
+                    );
+                    gradient.addColorStop(0, `rgba(200, 200, 200, ${this.opacity})`);
+                    gradient.addColorStop(1, 'rgba(200, 200, 200, 0)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            for (let i = 0; i < 20; i++) {
+                particles.push(new FogParticle());
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        // Birds Animation
+        function initBirds() {
+            const container = document.getElementById('birds-container');
+            
+            function createBird() {
+                const bird = document.createElement('div');
+                bird.className = 'bird';
+                bird.style.animation = `fly ${15 + Math.random() * 10}s linear infinite`;
+                bird.style.top = Math.random() * 50 + '%';
+                bird.style.animationDelay = Math.random() * 5 + 's';
+                
+                bird.innerHTML = `
+                    <svg viewBox="0 0 24 24" style="animation: wingFlap 0.5s infinite;">
+                        <path d="M2,12 Q6,8 12,12 T22,12" stroke="currentColor" fill="none" stroke-width="2"/>
+                        <path d="M2,12 Q6,16 12,12 T22,12" stroke="currentColor" fill="none" stroke-width="2"/>
+                    </svg>
+                `;
+                
+                container.appendChild(bird);
+                
+                setTimeout(() => {
+                    bird.remove();
+                }, 25000);
+            }
+            
+            setInterval(createBird, 4000);
+            createBird();
+        }
+
+        // Fireflies (Night Mode)
+        let nightMode = false;
+        function toggleNightMode() {
+            nightMode = !nightMode;
+            const icon = document.getElementById('mode-icon');
+            const container = document.getElementById('fireflies-container');
+            
+            if (nightMode) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                document.body.style.background = '#0a0505';
+                createFireflies();
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                document.body.style.background = '#1a0f0a';
+                container.innerHTML = '';
+            }
+        }
+
+        function createFireflies() {
+            const container = document.getElementById('fireflies-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 30; i++) {
+                const firefly = document.createElement('div');
+                firefly.className = 'firefly';
+                firefly.style.left = Math.random() * 100 + '%';
+                firefly.style.top = Math.random() * 100 + '%';
+                firefly.style.animationDelay = Math.random() * 3 + 's';
+                firefly.style.animationDuration = (3 + Math.random() * 2) + 's';
+                
+                // Random movement
+                setInterval(() => {
+                    firefly.style.left = Math.random() * 100 + '%';
+                    firefly.style.top = Math.random() * 100 + '%';
+                    firefly.style.transition = 'all 5s ease-in-out';
+                }, 5000);
+                
+                container.appendChild(firefly);
+            }
+        }
+
+        // Render Services
+        function renderServices() {
+            const grid = document.getElementById('services-grid');
+            
+            servicesData.forEach((category, index) => {
+                const card = document.createElement('div');
+                card.className = 'service-card rounded-2xl p-6 cursor-pointer';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br ${category.color} flex items-center justify-center text-3xl text-white shadow-lg">
+                            <i class="fas ${category.icon}"></i>
+                        </div>
+                        <span class="text-village-gold text-2xl">
+                            <i class="fas fa-chevron-down transition-transform duration-300" id="icon-${category.id}"></i>
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-village-gold mb-3 font-mukta">${category.title}</h3>
+                    <p class="text-village-cream opacity-80 mb-4">${category.services.length} सेवाएं उपलब्ध</p>
+                    <div class="category-content" id="content-${category.id}">
+                        <div class="grid gap-3 mt-4 pt-4 border-t border-village-gold border-opacity-30">
+                            ${category.services.map(service => `
+                                <button onclick="event.stopPropagation(); showServiceDetail('${category.title}', '${service}')" 
+                                        class="sub-service-btn w-full text-left px-4 py-3 rounded-lg text-village-cream hover:text-white font-semibold flex items-center gap-3 group">
+                                    <i class="fas fa-check-circle text-village-gold group-hover:scale-110 transition"></i>
+                                    ${service}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                card.onclick = () => toggleCategory(category.id);
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleCategory(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            content.classList.toggle('active');
+            icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0)';
+        }
+
+        function showServiceDetail(category, service) {
+            document.getElementById('modal-title').textContent = category;
+            document.getElementById('modal-content').innerHTML = `
+                <div class="bg-black bg-opacity-30 p-6 rounded-xl border border-village-gold border-opacity-30">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-village-gold to-yellow-600 flex items-center justify-center text-4xl text-village-dark">
+                            <i class="fas fa-concierge-bell"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-bold text-village-gold">${service}</h4>
+                            <p class="text-village-cream opacity-80">पूर्ण विवरण और आवेदन</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-village-cream">
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                            <h5 class="text-village-gold font-bold mb-2"><i class="fas fa-info-circle mr-2"></i>सेवा विवरण</h5>
+                            <p>यह सेवा ${category} के अंतर्गत प्रदान की जाती है। हमारे केंद्र पर तुरंत सहायता प्राप्त करें।</p>
+                        </div>
+                        
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                            <h5 class="text-village-gold font-bold mb-2"><i class="fas fa-clock mr-2"></i>समय सीमा</h5>
+                            <p>सामान्यतः 1-7 कार्य दिवस (दस्तावेज़ के अनुसार)</p>
+                        </div>
+                        
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                            <h5 class="text-village-gold font-bold mb-2"><i class="fas fa-file-alt mr-2"></i>आवश्यक दस्तावेज़</h5>
+                            <ul class="list-disc list-inside space-y-1 ml-4">
+                                <li>आधार कार्ड</li>
+                                <li>पासपोर्ट साइज फोटो</li>
+                                <li>संबंधित प्रमाण पत्र</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex gap-4">
+                        <a href="tel:7979788689" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg text-center font-bold transition flex items-center justify-center gap-2">
+                            <i class="fas fa-phone"></i> कॉल करें
+                        </a>
+                        <a href="https://wa.me/917979788689" target="_blank" class="flex-1 bg-village-gold hover:bg-yellow-600 text-village-dark py-3 rounded-lg text-center font-bold transition flex items-center justify-center gap-2">
+                            <i class="fab fa-whatsapp"></i> व्हाट्सएप
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('service-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('service-modal').classList.add('hidden');
+        }
+
+        // Scroll Effects
+        function initScrollEffects() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    navbar.classList.add('bg-black', 'bg-opacity-90');
+                    navbar.classList.remove('bg-opacity-0');
+                } else {
+                    navbar.classList.remove('bg-black', 'bg-opacity-90');
+                    navbar.classList.add('bg-opacity-0');
+                }
+            });
+        }
+
+        // Parallax Effect
+        function initParallax() {
+            const heroBg = document.getElementById('hero-bg');
+            
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                heroBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+            });
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // EmailJS Form Submit
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const btnIcon = document.getElementById('btn-icon');
+            const btnText = document.getElementById('btn-text');
+            const formMsg = document.getElementById('form-message');
+            
+            // Loading state
+            btn.disabled = true;
+            btnIcon.className = 'fas fa-spinner fa-spin';
+            btnText.textContent = 'भेज रहे हैं...';
+            formMsg.classList.add('hidden');
+            
+            // EmailJS Send
+            // ⚠️ Niche apna Service ID aur Template ID daalo
+            emailjs.sendForm(
+                'YOUR_SERVICE_ID',   // 🔧 EmailJS → Email Services → Service ID
+                'YOUR_TEMPLATE_ID',  // 🔧 EmailJS → Email Templates → Template ID
+                '#contact-form'
+            ).then(function() {
+                // Success
+                btnIcon.className = 'fas fa-check-circle';
+                btnText.textContent = 'भेज दिया गया!';
+                btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
+                
+                formMsg.textContent = '✅ धन्यवाद! आपका संदेश Info@graminsevakendra.in पर पहुंच गया है। हम जल्द संपर्क करेंगे।';
+                formMsg.className = 'text-center py-3 px-4 rounded-lg font-semibold text-lg bg-green-900 bg-opacity-50 text-green-300 border border-green-500';
+                
+                document.getElementById('contact-form').reset();
+                
+                // Reset button after 4 seconds
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btnIcon.className = 'fas fa-paper-plane';
+                    btnText.textContent = 'भेजें';
+                    btn.style.background = '';
+                }, 4000);
+                
+            }, function(error) {
+                // Error
+                btnIcon.className = 'fas fa-exclamation-circle';
+                btnText.textContent = 'कुछ गड़बड़ हुई';
+                
+                formMsg.textContent = '❌ संदेश नहीं भेजा जा सका। कृपया सीधे कॉल करें: 7979788689';
+                formMsg.className = 'text-center py-3 px-4 rounded-lg font-semibold text-lg bg-red-900 bg-opacity-50 text-red-300 border border-red-500';
+                
+                btn.disabled = false;
+                setTimeout(() => {
+                    btnIcon.className = 'fas fa-paper-plane';
+                    btnText.textContent = 'दोबारा भेजें';
+                }, 3000);
+                
+                console.error('EmailJS Error:', error);
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'star
